@@ -1,22 +1,65 @@
 <!DOCTYPE html>
-<html>
+<html lang="et">
 <head>
-<link rel="stylesheet" href="style.css">
-<title>Social Wall</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Social-Wall</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
- <navigation>
-    <nav class="container">
-        <h class="logo"><span>Social</span>Wall</h>
-        <button id="login ">%username%</button>
-    </nav>
- </navigation>
 
- <div class="post">
-    <span class="char-count">0 / 280</span> 
-    <button class="postita">Upload</button>
- </div>
+  <header>
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-text">Social-Wall</span>
+      </div>
+      <div class="header-meta" id="post-count">0 posts</div>
+    </div>
+  </header>
+
+  <main>
+    <section class="form-section">
+      <div class="form-card">
+        <div class="form-top">
+          <div class="form-field">
+            <label for="author">Nickname</label>
+            <input type="text" id="author" placeholder="Anonymous" maxlength="40" />
+          </div>
+          <div class="form-field">
+            <label for="cat">Category</label>
+            <select id="cat">
+              <option value="Life">🌱 Life</option>
+              <option value="Work">💼 Work</option>
+              <option value="School">🏫 School</option>
+              <option value="Crypto">₿ Crypto</option>
+              <option value="Other">🗂️ Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-field">
+          <textarea id="post" placeholder="What's new?..." maxlength="500"></textarea>
+          <div class="char-count"><span id="char-num">0</span>/500</div>
+        </div>
+        <div class="form-footer">
+          <p class="status-msg" id="status"></p>
+          <button class="btn-add" id="add-btn" onclick="addPost()">
+            Add post
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 2L14 8L8 14M14 8H2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="posts-section">
+      <p class="section-label">Posts</p>
+      <div class="filter-row" id="filters"></div>
+      <div class="posts-grid" id="list"></div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
 </body>
-
 </html>
