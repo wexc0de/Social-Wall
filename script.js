@@ -1,9 +1,27 @@
+// teha et saaks likeda
+// saaks commentida
+// koige populaarsemad userid
+// kui palju mittu kategooriat on
 const JSONBIN_BIN_ID = '69bdde4db7ec241ddc89c78f';
 const JSONBIN_API_KEY = '$2a$10$tjO8isDPVduBRGAfE8ELFuVPKZO0zUkBgXyMUx57QsHw8UfztnyBi';
 const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`;
 
 let posts = [];
 let activeFilter = 'All';
+
+// Track liked post IDs in localStorage so each user can only like once
+function getLikedIds() {
+  try { return JSON.parse(localStorage.getItem('liked_posts') || '[]'); }
+  catch { return []; }
+}
+
+function saveLikedIds(ids) {
+  localStorage.setItem('liked_posts', JSON.stringify(ids));
+}
+
+function hasLiked(id) {
+  return getLikedIds().includes(id);
+}
 
 async function loadPosts() {
   setStatus('Loading...', '');
@@ -14,6 +32,8 @@ async function loadPosts() {
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const data = await res.json();
     posts = Array.isArray(data.record) ? data.record : [];
+    // Ensure all posts have a likes field
+    posts = posts.map(p => ({ likes: 0, ...p }));
   } catch (e) {
     console.error('Loading failed:', e);
     setStatus('Loading failed. Check API key.', 'error');
@@ -61,6 +81,7 @@ async function addPost() {
     cat:    cat,
     text:   text,
     date:   new Date().toLocaleDateString('et-EE'),
+    likes:  0,
   };
 
   posts.unshift(newPost);
@@ -87,6 +108,44 @@ async function addPost() {
   renderFilters();
   renderPosts();
   updateCount();
+}
+
+async function likePost(id) {
+  if (hasLiked(id)) return;
+
+  const post = posts.find(p => p.id === id);
+  if (!post) return;
+
+  post.likes = (post.likes || 0) + 1;
+
+  // Optimistically update UI
+  const btn = document.querySelector(`.like-btn[data-id="${id}"]`);
+  if (btn) {
+    btn.classList.add('liked');
+    btn.querySelector('.like-count').textContent = post.likes;
+    btn.disabled = true;
+  }
+
+  // Save liked state locally
+  const liked = getLikedIds();
+  liked.push(id);
+  saveLikedIds(liked);
+
+  try {
+    await savePosts();
+  } catch (e) {
+    console.error('Like save failed:', e);
+    // Revert on error
+    post.likes -= 1;
+    const revertBtn = document.querySelector(`.like-btn[data-id="${id}"]`);
+    if (revertBtn) {
+      revertBtn.classList.remove('liked');
+      revertBtn.querySelector('.like-count').textContent = post.likes;
+      revertBtn.disabled = false;
+    }
+    const ids = getLikedIds().filter(i => i !== id);
+    saveLikedIds(ids);
+  }
 }
 
 function getCategories() {
@@ -121,16 +180,32 @@ function renderPosts() {
     return;
   }
 
-  list.innerHTML = filtered.map((post, i) => `
+  list.innerHTML = filtered.map((post, i) => {
+    const liked = hasLiked(post.id);
+    return `
     <div class="post-card" style="animation-delay:${i * 35}ms">
       <div class="post-top">
         <span class="post-badge">${escHtml(post.cat)}</span>
         <span class="post-date">${escHtml(post.date)}</span>
       </div>
       <p class="post-text">${escHtml(post.text)}</p>
-      <div class="post-author">— ${escHtml(post.author)}</div>
+      <div class="post-footer">
+        <div class="post-author">— ${escHtml(post.author)}</div>
+        <button
+          class="like-btn ${liked ? 'liked' : ''}"
+          data-id="${post.id}"
+          onclick="likePost(${post.id})"
+          ${liked ? 'disabled' : ''}
+          title="${liked ? 'Already liked' : 'Like this post'}"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="${liked ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+          <span class="like-count">${post.likes || 0}</span>
+        </button>
+      </div>
     </div>
-  `).join('');
+  `}).join('');
 }
 
 function updateCount() {

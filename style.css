@@ -287,12 +287,61 @@ textarea {
   flex: 1;
 }
 
+.post-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--border);
+  padding-top: 9px;
+  gap: 8px;
+}
+
 .post-author {
   font-size: 12px;
   color: var(--text-muted);
   font-style: italic;
-  border-top: 1px solid var(--border);
-  padding-top: 9px;
+}
+
+.like-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+
+.like-btn:hover:not(:disabled) {
+  border-color: #e05a7a;
+  color: #e05a7a;
+  background: #fff0f3;
+}
+
+.like-btn:hover:not(:disabled) svg {
+  fill: none;
+  stroke: #e05a7a;
+}
+
+.like-btn.liked {
+  border-color: #e05a7a;
+  color: #e05a7a;
+  background: #fff0f3;
+}
+
+.like-btn.liked svg {
+  fill: #e05a7a;
+  stroke: #e05a7a;
+}
+
+.like-btn:disabled {
+  cursor: default;
 }
 
 .empty-state {
