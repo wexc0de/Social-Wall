@@ -10,9 +10,9 @@
   --border: #e8e4dc;
   --text: #18160f;
   --text-muted: #9a9286;
-  --accent: #3a5a3a;
+  --accent: #000000;
   --accent-soft: #f0f4f0;
-  --accent-hover: #2a4228;
+  --accent-hover: #000000;
   --font-display: 'Lora', Georgia, serif;
   --font-body: 'Outfit', sans-serif;
   --r: 10px;
@@ -219,10 +219,6 @@ textarea {
   letter-spacing: 0.01em;
 }
 
-.filter-btn:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-}
 
 .filter-btn.active {
   background: var(--accent);
@@ -248,10 +244,6 @@ textarea {
   transition: border-color 0.15s, box-shadow 0.15s;
 }
 
-.post-card:hover {
-  border-color: #d0ccc2;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-}
 
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(10px); }
@@ -322,11 +314,6 @@ textarea {
   border-color: #e05a7a;
   color: #e05a7a;
   background: #fff0f3;
-}
-
-.like-btn:hover:not(:disabled) svg {
-  fill: none;
-  stroke: #e05a7a;
 }
 
 .like-btn.liked {
