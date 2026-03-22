@@ -9,7 +9,7 @@ const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`;
 let posts = [];
 let activeFilter = 'All';
 
-// Track liked post IDs in localStorage so each user can only like once
+
 function getLikedIds() {
   try { return JSON.parse(localStorage.getItem('liked_posts') || '[]'); }
   catch { return []; }
@@ -32,7 +32,6 @@ async function loadPosts() {
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const data = await res.json();
     posts = Array.isArray(data.record) ? data.record : [];
-    // Ensure all posts have a likes field
     posts = posts.map(p => ({ likes: 0, ...p }));
   } catch (e) {
     console.error('Loading failed:', e);
@@ -118,7 +117,6 @@ async function likePost(id) {
 
   post.likes = (post.likes || 0) + 1;
 
-  // Optimistically update UI
   const btn = document.querySelector(`.like-btn[data-id="${id}"]`);
   if (btn) {
     btn.classList.add('liked');
@@ -126,7 +124,6 @@ async function likePost(id) {
     btn.disabled = true;
   }
 
-  // Save liked state locally
   const liked = getLikedIds();
   liked.push(id);
   saveLikedIds(liked);
@@ -135,7 +132,6 @@ async function likePost(id) {
     await savePosts();
   } catch (e) {
     console.error('Like save failed:', e);
-    // Revert on error
     post.likes -= 1;
     const revertBtn = document.querySelector(`.like-btn[data-id="${id}"]`);
     if (revertBtn) {

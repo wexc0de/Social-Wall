@@ -161,13 +161,14 @@ textarea {
 }
 
 .status-msg {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--text-muted);
   flex: 1;
   min-height: 18px;
+  letter-spacing: 0.01em;
 }
 
-.status-msg.error   { color: #a33; }
+.status-msg.error   { color: rgb(180, 51, 51); }
 .status-msg.success { color: var(--accent); }
 
 .btn-add {
@@ -189,10 +190,9 @@ textarea {
 
 .btn-add:hover   { background: var(--accent-hover); }
 .btn-add:active  { transform: scale(0.97); }
-.btn-add:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
 
 .section-label {
-  font-size: 11px;
+  font-size: 13px;
   text-transform: uppercase;
   letter-spacing: 0.09em;
   color: var(--text-muted);
@@ -208,8 +208,8 @@ textarea {
 
 .filter-btn {
   font-family: var(--font-body);
-  font-size: 12px;
-  padding: 5px 13px;
+  font-size: 14px;
+  padding: 7px 15px;
   border-radius: 999px;
   border: 1px solid var(--border);
   background: transparent;
@@ -234,7 +234,7 @@ textarea {
 
 .post-card {
   background: var(--surface);
-  border: 1px solid var(--border);
+  border: 2px solid var(--border);
   border-radius: var(--r-lg);
   padding: 1.1rem 1.2rem;
   display: flex;
@@ -289,7 +289,7 @@ textarea {
 }
 
 .post-author {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--text-muted);
   font-style: italic;
 }
@@ -344,4 +344,18 @@ textarea {
   .hero { padding: 2.5rem 0 2rem; }
   .form-top { grid-template-columns: 1fr; }
   .posts-grid { grid-template-columns: 1fr; }
+}
+
+.nav-contact {
+  font-family: var(--font-body);
+  font-size: 16px;
+  padding: 9px 17px;
+  border-radius: 999px;
+  border: 2px solid var(--border);
+  background: transparent;
+  color: rgb(54, 51, 51);
+  cursor: pointer;
+  letter-spacing: 0.01em;
+  display: block;
+  margin: 0 auto;
 }
